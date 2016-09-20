@@ -1,9 +1,9 @@
-﻿using AddressProcessing.Address;
-using AddressProcessing.Address.v1;
-using NUnit.Framework;
-
-namespace AddressProcessing.Tests
+﻿namespace AddressProcessing.Tests
 {
+    using Address;
+    using Address.v1;
+    using NUnit.Framework;
+
     [TestFixture]
     public class AddressFileProcessorTests
     {

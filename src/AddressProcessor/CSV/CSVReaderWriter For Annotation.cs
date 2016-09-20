@@ -1,8 +1,8 @@
-﻿using System;
-using System.IO;
-
-namespace AddressProcessing.CSV
+﻿namespace AddressProcessing.CSV
 {
+    using System;
+    using System.IO;
+
     /*
         1) List three to five key concerns with this implementation that you would discuss with the junior developer. 
 
@@ -111,7 +111,7 @@ namespace AddressProcessing.CSV
                 column2 = null;
 
                 return false;
-            } 
+            }
             else
             {
                 column1 = columns[FIRST_COLUMN];
