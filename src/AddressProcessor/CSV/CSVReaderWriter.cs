@@ -87,22 +87,32 @@
             return _readerStream.ReadLine();
         }
 
-        public void Close()
-        {
-            if (_writerStream != null)
-            {
-                _writerStream.Close();
-            }
-
-            if (_readerStream != null)
-            {
-                _readerStream.Close();
-            }
-        }
-
         public void Dispose()
         {
-            throw new NotImplementedException();
+            if (contactsReader != null)
+            {
+                contactsReader.Dispose();
+                contactsReader = null;
+            }
+            if (csvWriter != null)
+            {
+                csvWriter.Dispose();
+                csvWriter = null;
+            }
+
+            GC.SuppressFinalize(this);
+        }
+
+        public void Close()
+        {
+            if (contactsReader != null)
+            {
+                contactsReader.Close();
+            }
+            if (csvWriter != null)
+            {
+                csvWriter.Close();
+            }
         }
     }
 }
