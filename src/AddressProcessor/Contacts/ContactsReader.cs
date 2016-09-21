@@ -4,7 +4,7 @@
     using System.IO;
     using System.Threading.Tasks;
 
-    class ContactsReader : IContactsReader
+    public class ContactsReader : IContactsReader
     {
         private StreamReader streamReader = null;
         private char[] tabSeperator;

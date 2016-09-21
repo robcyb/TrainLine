@@ -1,6 +1,6 @@
 ﻿namespace AddressProcessing.Contacts
 {
-    class Contacts
+    public class Contacts
     {
         public Contacts(string name, string postalAddress)
         {

@@ -3,7 +3,7 @@
     using System;
     using System.Threading.Tasks;
 
-    interface ICSVWriter : IDisposable
+    public interface ICSVWriter : IDisposable
     {
         Task WriteToCSV(params string[] columnCollection);
 

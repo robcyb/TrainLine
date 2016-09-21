@@ -1,5 +1,6 @@
 ﻿namespace AddressProcessing.CSV
 {
+    using Contacts;
     using System;
     using System.IO;
 
@@ -10,12 +11,20 @@
 
     public class CSVReaderWriter : IDisposable
     {
+        private IContactsReader contactsReader = null;
+        private ICSVWriter csvWriter;
+
         private StreamReader _readerStream = null;
         private StreamWriter _writerStream = null;
 
         public CSVReaderWriter()
         {
+        }
 
+        public CSVReaderWriter(IContactsReader contactsReader, ICSVWriter csvWriter)
+        {
+            this.contactsReader = contactsReader;
+            this.csvWriter = csvWriter;
         }
 
         [Flags]
