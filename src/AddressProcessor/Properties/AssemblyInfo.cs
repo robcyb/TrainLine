@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("AddressProcessor")]
 [assembly: AssemblyCopyright("Copyright © TrainLine.com 2016")]
 [assembly: AssemblyTrademark("")]
-[assembly: AssemblyCulture("en-US")]
+[assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]
 [assembly: Guid("e006209d-e717-4cb8-98e4-5b20d720fa2f")]
 [assembly: AssemblyVersion("1.0.0.0")]
