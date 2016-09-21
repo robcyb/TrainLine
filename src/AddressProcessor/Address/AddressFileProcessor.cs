@@ -16,17 +16,19 @@
 
         public void Process(string inputFile)
         {
-            var reader = new CSVReaderWriter();
-            reader.Open(inputFile, CSVReaderWriter.Mode.Read);
-
-            string column1, column2;
-
-            while (reader.Read(out column1, out column2))
+            using (var reader = new CSVReaderWriter())
             {
-                _mailShot.SendMailShot(column1, column2);
-            }
+                reader.Open(inputFile, CSVReaderWriter.Mode.Read);
 
-            reader.Close();
+                string column1, column2;
+
+                while (reader.Read(out column1, out column2))
+                {
+                    _mailShot.SendMailShot(column1, column2);
+                }
+
+                reader.Close();
+            }
         }
     }
 }
