@@ -8,10 +8,15 @@
            Assume this code is in production and backwards compatibility must be maintained.
     */
 
-    public class CSVReaderWriter
+    public class CSVReaderWriter : IDisposable
     {
         private StreamReader _readerStream = null;
         private StreamWriter _writerStream = null;
+
+        public CSVReaderWriter()
+        {
+
+        }
 
         [Flags]
         public enum Mode { Read = 1, Write = 2 };
@@ -49,7 +54,7 @@
             WriteLine(outPut);
         }
 
-        public bool Read(string column1, string column2)
+        public bool Read(string name, string postalAddress)
         {
             const int FIRST_COLUMN = 0;
             const int SECOND_COLUMN = 1;
@@ -64,21 +69,21 @@
 
             if (columns.Length == 0)
             {
-                column1 = null;
-                column2 = null;
+                name = null;
+                postalAddress = null;
 
                 return false;
             }
             else
             {
-                column1 = columns[FIRST_COLUMN];
-                column2 = columns[SECOND_COLUMN];
+                name = columns[FIRST_COLUMN];
+                postalAddress = columns[SECOND_COLUMN];
 
                 return true;
             }
         }
 
-        public bool Read(out string column1, out string column2)
+        public bool Read(out string name, out string postalAddress)
         {
             const int FIRST_COLUMN = 0;
             const int SECOND_COLUMN = 1;
@@ -92,8 +97,8 @@
 
             if (line == null)
             {
-                column1 = null;
-                column2 = null;
+                name = null;
+                postalAddress = null;
 
                 return false;
             }
@@ -102,15 +107,15 @@
 
             if (columns.Length == 0)
             {
-                column1 = null;
-                column2 = null;
+                name = null;
+                postalAddress = null;
 
                 return false;
-            } 
+            }
             else
             {
-                column1 = columns[FIRST_COLUMN];
-                column2 = columns[SECOND_COLUMN];
+                name = columns[FIRST_COLUMN];
+                postalAddress = columns[SECOND_COLUMN];
 
                 return true;
             }
@@ -137,6 +142,11 @@
             {
                 _readerStream.Close();
             }
+        }
+
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }
