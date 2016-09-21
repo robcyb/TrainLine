@@ -8,9 +8,12 @@
 
         Please leave the rest of this file as it is so we can discuss your concerns during the next stage of the interview process.
         
-        *)
-        *)
-        *)
+        *) The lack of self-descriptive code, variable names, etc. are of concern. Perhaps review with the developer and explain the need for clear, concise and descriptive variables naming. 
+            For example, the use of underscores and mixed casing. Suggest to read "Clean Code" and/or "The pragmatic programmer" for further reference.
+        *) Code in both read methods violate the DRY principle. The code is repeated.
+        *) CSVReaderWriterForAnnotation breaks the single responsibility principle. The class contains functionality to read and write. Suggest to split out into single responsibilites (I.E., classes). This also improves testability when it comes to unit testing and mocking.
+        *) Both StreamReader and StreamWriter implement IDisposible interfaces. The code in this class does not clean up objects correctly, leading to potential memory leaks. Propose to call .close() explicitly or wrap in using statement.
+        *) Error checking/handling is generally poor. More specifically on line #83. Possible IndexOutOfRangeException on column2.
     */
 
     public class CSVReaderWriterForAnnotation
