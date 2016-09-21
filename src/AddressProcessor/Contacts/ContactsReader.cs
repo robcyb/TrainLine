@@ -8,6 +8,8 @@
     {
         private StreamReader streamReader = null;
         private char[] tabSeperator;
+        private readonly int firstColumn = 0;
+        private readonly int secondColumn = 1;
 
         public ContactsReader(string fileName)
             : this(File.OpenText(fileName), new char[] { '\t' })
@@ -66,7 +68,7 @@
             }
 
             // Column 0 contains the name, column 1 contains the postal address.
-            return new Contacts(columns[0], columns[1]);
+            return new Contacts(columns[firstColumn], columns[secondColumn]);
         }
     }
 }
