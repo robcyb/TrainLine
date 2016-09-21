@@ -3,6 +3,7 @@
     using Contacts;
     using System;
     using System.IO;
+    using System.Threading;
 
     /*
         2) Refactor this class into clean, elegant, rock-solid & well performing code, without over-engineering.
@@ -34,12 +35,11 @@
         {
             if (mode == Mode.Read)
             {
-                _readerStream = File.OpenText(fileName);
+                contactsReader = new ContactsReader(fileName);
             }
             else if (mode == Mode.Write)
             {
-                FileInfo fileInfo = new FileInfo(fileName);
-                _writerStream = fileInfo.CreateText();
+                csvWriter = new CSVWriter(fileName, "\t");
             }
             else
             {
@@ -49,85 +49,32 @@
 
         public void Write(params string[] columns)
         {
-            string outPut = "";
-
-            for (int i = 0; i < columns.Length; i++)
-            {
-                outPut += columns[i];
-                if ((columns.Length - 1) != i)
-                {
-                    outPut += "\t";
-                }
-            }
-
-            WriteLine(outPut);
+            csvWriter.WriteToCSV(columns).Wait(Timeout.Infinite);
         }
 
         public bool Read(string name, string postalAddress)
         {
-            const int FIRST_COLUMN = 0;
-            const int SECOND_COLUMN = 1;
-
-            string line;
-            string[] columns;
-
-            char[] separator = { '\t' };
-
-            line = ReadLine();
-            columns = line.Split(separator);
-
-            if (columns.Length == 0)
-            {
-                name = null;
-                postalAddress = null;
-
-                return false;
-            }
-            else
-            {
-                name = columns[FIRST_COLUMN];
-                postalAddress = columns[SECOND_COLUMN];
-
-                return true;
-            }
+            return Read(out name, out postalAddress);
         }
 
         public bool Read(out string name, out string postalAddress)
         {
-            const int FIRST_COLUMN = 0;
-            const int SECOND_COLUMN = 1;
+            bool done = !contactsReader.isEndOfStream();
 
-            string line;
-            string[] columns;
+            var contact = contactsReader.ReadContacts().Result;
 
-            char[] separator = { '\t' };
-
-            line = ReadLine();
-
-            if (line == null)
+            if (contact == null)
             {
                 name = null;
                 postalAddress = null;
-
-                return false;
-            }
-
-            columns = line.Split(separator);
-
-            if (columns.Length == 0)
-            {
-                name = null;
-                postalAddress = null;
-
-                return false;
             }
             else
             {
-                name = columns[FIRST_COLUMN];
-                postalAddress = columns[SECOND_COLUMN];
-
-                return true;
+                name = contact.Name;
+                postalAddress = contact.PostalAddress;
             }
+
+            return done;
         }
 
         private void WriteLine(string line)
