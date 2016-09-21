@@ -2,7 +2,6 @@
 {
     using NUnit.Framework;
     using System.IO;
-    using System.Threading.Tasks;
     using AddressProcessing.CSV;
     using System;
 
@@ -44,6 +43,58 @@
             csvReaderWriter.Open(missingFileToCreate, CSVReaderWriter.Mode.Write);
 
             Assert.True(File.Exists(missingFileToCreate));
+        }
+
+        [Test]
+        public void Should_return_false_when_reading_empty_file()
+        {
+            string pathToEmptyFile = "test_data/contacts-empty.csv";
+
+            var csvReaderWriter = new CSVReaderWriter();
+
+            csvReaderWriter.Open(pathToEmptyFile, CSVReaderWriter.Mode.Read);
+
+            string firstColumn, secondColumn;
+
+            var csvOutput = csvReaderWriter.Read(out firstColumn, out secondColumn);
+
+            Assert.False(csvOutput);
+        }
+
+        [Test]
+        public void Should_throw_when_reading_malformed_file()
+        {
+            // As per code review - we know (currently) that if there is only 1 column we will get an IndexOutOfRangeException.
+            // Let's test that explicitly.
+
+            string pathToMalformedFile = "test_data/contacts-malformed.csv";
+
+            var csvReaderWriter = new CSVReaderWriter();
+
+            csvReaderWriter.Open(pathToMalformedFile, CSVReaderWriter.Mode.Read);
+
+            string firstColumn, secondColumn;
+
+            Assert.Throws<IndexOutOfRangeException>(delegate
+            {
+                csvReaderWriter.Read(out firstColumn, out secondColumn);
+            });
+        }
+
+        [Test]
+        public void Should_parse_valid_CSV_file_correctly()
+        {
+            string pathToCSV = "test_data/contacts.csv";
+
+            var csvReaderWriter = new CSVReaderWriter();
+
+            csvReaderWriter.Open(pathToCSV, CSVReaderWriter.Mode.Read);
+
+            string firstColumn, secondColumn;
+
+            var csvOutput = csvReaderWriter.Read(out firstColumn, out secondColumn);
+
+            Assert.True(csvOutput);
         }
 
         [Theory]
