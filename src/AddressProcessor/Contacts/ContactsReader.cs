@@ -56,7 +56,9 @@
             string line = string.Empty;
             string[] columns = null;
 
-            while (null != (line = await streamReader.ReadLineAsync()))
+            line = await streamReader.ReadLineAsync();
+
+            if (!string.IsNullOrEmpty(line))
             {
                 columns = line.Split('\t');
             }
