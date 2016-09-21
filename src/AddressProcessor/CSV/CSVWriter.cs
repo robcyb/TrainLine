@@ -22,7 +22,16 @@
 
         private static StreamWriter CreateWriteStream(string outputFileName)
         {
-            throw new NotImplementedException();
+            var filesDirectory = Path.GetDirectoryName(outputFileName);
+
+            if (!Directory.Exists(filesDirectory))
+            {
+                Directory.CreateDirectory(filesDirectory);
+            }
+
+            FileInfo fileInfo = new FileInfo(outputFileName);
+
+            return fileInfo.CreateText();
         }
 
         public void Close()
@@ -32,12 +41,26 @@
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Dispose(streamWriter != null);
+            GC.SuppressFinalize(this);
         }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (streamWriter != null)
+                {
+                    streamWriter.Close();
+                    streamWriter.Dispose();
+                    streamWriter = null;
+                }
+            }
+        }
         public Task WriteToCSV(params string[] columnCollection)
         {
-            throw new NotImplementedException();
+            var newLine = string.Join(lineSeperator, columnCollection);
+            return streamWriter.WriteLineAsync(newLine);
         }
     }
 }
