@@ -59,6 +59,9 @@
             var csvOutput = csvReaderWriter.Read(out firstColumn, out secondColumn);
 
             Assert.False(csvOutput);
+
+            Assert.IsNullOrEmpty(firstColumn);
+            Assert.IsNullOrEmpty(secondColumn);
         }
 
         [Test]
@@ -95,6 +98,9 @@
             var csvOutput = csvReaderWriter.Read(out firstColumn, out secondColumn);
 
             Assert.True(csvOutput);
+
+            Assert.IsNotNullOrEmpty(firstColumn);
+            Assert.IsNotNullOrEmpty(secondColumn);
         }
 
         [Theory]
