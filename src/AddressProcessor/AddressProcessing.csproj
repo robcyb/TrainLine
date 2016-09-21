@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>AddressProcessing</RootNamespace>
     <AssemblyName>AddressProcessing</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -60,6 +60,8 @@
     <Compile Include="Contacts\IContactsReader.cs" />
     <Compile Include="CSV\CSVReaderWriter For Annotation.cs" />
     <Compile Include="CSV\CSVReaderWriter.cs" />
+    <Compile Include="CSV\CSVWriter.cs" />
+    <Compile Include="CSV\ICSVWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Address\v1\IMailShot.cs" />
     <Compile Include="Address\v2\IMailShot.cs" />

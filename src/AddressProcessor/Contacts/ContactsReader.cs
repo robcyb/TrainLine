@@ -12,7 +12,6 @@
         public ContactsReader(string fileName)
             : this(File.OpenText(fileName), new char[] { '\t' })
         {
-
         }
 
         public ContactsReader(StreamReader streamReader, char[] tabSeperator)
@@ -50,9 +49,24 @@
             return streamReader.EndOfStream;
         }
 
-        public Task<Contacts> ReadContacts()
+        public async Task<Contacts> ReadContacts()
         {
-            throw new NotImplementedException();
+            string line = string.Empty;
+            string[] columns = null;
+
+            while (null != (line = await streamReader.ReadLineAsync()))
+            {
+                columns = line.Split('\t');
+            }
+
+            // We should have minimum of 2 columns from the CSV file.
+            if (columns == null || columns.Length < 2)
+            {
+                return null;
+            }
+
+            // Column 0 contains the name, column 1 contains the postal address.
+            return new Contacts(columns[0], columns[1]);
         }
     }
 }
