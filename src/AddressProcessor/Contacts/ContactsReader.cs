@@ -23,17 +23,31 @@
 
         public void Close()
         {
-            throw new NotImplementedException();
+            streamReader.Close();
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Dispose(streamReader != null);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (streamReader != null)
+                {
+                    streamReader.Close();
+                    streamReader.Dispose();
+                    streamReader = null;
+                }
+            }
         }
 
         public bool isEndOfStream()
         {
-            throw new NotImplementedException();
+            return streamReader.EndOfStream;
         }
 
         public Task<Contacts> ReadContacts()
