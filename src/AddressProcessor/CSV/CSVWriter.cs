@@ -57,6 +57,7 @@
                 }
             }
         }
+
         public Task WriteToCSV(params string[] columnCollection)
         {
             var newLine = string.Join(lineSeperator, columnCollection);
