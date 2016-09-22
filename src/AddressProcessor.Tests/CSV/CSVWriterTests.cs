@@ -38,23 +38,5 @@
                 Assert.True(Directory.Exists(directory));
             }
         }
-
-        [Test]
-        public void Should_write_to_file_correctly()
-        {
-            Assert.Inconclusive();
-        }
-
-        [Test]
-        public void Should_use_a_streamwriter_to_write_file()
-        {
-            Assert.Inconclusive();
-        }
-
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
-
-        }
     }
 }
