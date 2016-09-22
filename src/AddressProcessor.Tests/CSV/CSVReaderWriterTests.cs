@@ -1,9 +1,10 @@
 ﻿namespace Csv.Tests
 {
-    using NUnit.Framework;
-    using System.IO;
     using AddressProcessing.CSV;
+    using Moq;
+    using NUnit.Framework;
     using System;
+    using System.IO;
 
     [TestFixture]
     public class CSVReaderWriterTests
@@ -65,23 +66,20 @@
         }
 
         [Test]
-        public void Should_throw_when_reading_malformed_file()
+        public void Should_handle_reading_malformed_file()
         {
-            // As per code review - we know (currently) that if there is only 1 column we will get an IndexOutOfRangeException.
-            // Let's test that explicitly.
-
             string pathToMalformedFile = "test_data/contacts-malformed.csv";
 
             var csvReaderWriter = new CSVReaderWriter();
 
             csvReaderWriter.Open(pathToMalformedFile, CSVReaderWriter.Mode.Read);
 
-            string firstColumn, secondColumn;
+            string name, postalAddress;
 
-            Assert.Throws<IndexOutOfRangeException>(delegate
-            {
-                csvReaderWriter.Read(out firstColumn, out secondColumn);
-            });
+            Assert.IsTrue(csvReaderWriter.Read(out name, out postalAddress));
+
+            Assert.IsNullOrEmpty(name);
+            Assert.IsNullOrEmpty(postalAddress);
         }
 
         [Test]
@@ -93,18 +91,16 @@
 
             csvReaderWriter.Open(pathToCSV, CSVReaderWriter.Mode.Read);
 
-            string firstColumn, secondColumn;
+            string name, postalAddress;
 
-            var csvOutput = csvReaderWriter.Read(out firstColumn, out secondColumn);
+            var csvOutput = csvReaderWriter.Read(out name, out postalAddress);
 
-            Assert.True(csvOutput);
-
-            Assert.IsNotNullOrEmpty(firstColumn);
-            Assert.IsNotNullOrEmpty(secondColumn);
+            Assert.IsNotNullOrEmpty(name);
+            Assert.IsNotNullOrEmpty(postalAddress);
         }
 
-        [Theory]
-        public void Should_throw_when_invalid_or_missing_directory(CSVReaderWriter.Mode mode)
+        [Test]
+        public void Should_throw_when_invalid_or_missing_directory_on_read()
         {
             string missingFileAndDirectory = @"input\notfound.csv";
 
@@ -114,8 +110,18 @@
 
             Assert.Throws<DirectoryNotFoundException>(delegate
             {
-                csvReaderWriter.Open(missingFileAndDirectory, mode);
+                csvReaderWriter.Open(missingFileAndDirectory, CSVReaderWriter.Mode.Read);
             });
+        }
+
+
+        [TestFixtureTearDown]
+        public void TearDown()
+        {
+            if (Directory.Exists(TestDataOutputDirectory))
+            {
+                Directory.Delete(TestDataOutputDirectory, true);
+            }
         }
 
         /// <summary>

@@ -7,22 +7,22 @@
     [TestFixture]
     public class AddressFileProcessorTests
     {
-        private FakeMailShotService _fakeMailShotService;
+        private FakeMailShotService fakeMailShotService;
         private const string TestInputFile = @"test_data\contacts.csv";
 
         [SetUp]
         public void SetUp()
         {
-            _fakeMailShotService = new FakeMailShotService();
+            fakeMailShotService = new FakeMailShotService();
         }
 
         [Test]
         public void Should_send_mail_using_mailshot_service()
         {
-            var processor = new AddressFileProcessor(_fakeMailShotService);
+            var processor = new AddressFileProcessor(fakeMailShotService);
             processor.Process(TestInputFile);
 
-            Assert.That(_fakeMailShotService.Counter, Is.EqualTo(229));
+            Assert.That(fakeMailShotService.Counter, Is.EqualTo(229)); // TODO: possible issue relying on this hard-coded value.
         }
 
         internal class FakeMailShotService : IMailShot
