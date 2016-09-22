@@ -2,22 +2,14 @@
 {
     using Contacts;
     using System;
-    using System.IO;
     using System.Threading;
-
-    /*
-        2) Refactor this class into clean, elegant, rock-solid & well performing code, without over-engineering.
-           Assume this code is in production and backwards compatibility must be maintained.
-    */
 
     public class CSVReaderWriter : IDisposable
     {
-        private IContactsReader contactsReader = null;
+        private IContactsReader contactsReader;
         private ICSVWriter csvWriter;
 
-        private StreamReader _readerStream = null;
-        private StreamWriter _writerStream = null;
-
+        // Exposing default constructor to ensure backwards compatibility.
         public CSVReaderWriter()
         {
         }
@@ -52,6 +44,7 @@
             csvWriter.WriteToCSV(columns).Wait(Timeout.Infinite);
         }
 
+        // For backwards compatability, keep existing method signature and delegate.
         public bool Read(string name, string postalAddress)
         {
             return Read(out name, out postalAddress);
@@ -59,7 +52,7 @@
 
         public bool Read(out string name, out string postalAddress)
         {
-            bool done = !contactsReader.isEndOfStream();
+            bool stillProcessing = !contactsReader.isEndOfStream();
 
             var contact = contactsReader.ReadContacts().Result;
 
@@ -74,17 +67,7 @@
                 postalAddress = contact.PostalAddress;
             }
 
-            return done;
-        }
-
-        private void WriteLine(string line)
-        {
-            _writerStream.WriteLine(line);
-        }
-
-        private string ReadLine()
-        {
-            return _readerStream.ReadLine();
+            return stillProcessing;
         }
 
         public void Dispose()
