@@ -26,6 +26,8 @@
                 await streamWriter.WriteLineAsync(newContact);
                 await streamWriter.FlushAsync();
 
+                memoryStream.Position = 0; // Fix issue with NullReferenceException
+
                 var contact = await contactsReader.ReadContacts();
 
                 Assert.AreEqual(contactName, contact.Name);
