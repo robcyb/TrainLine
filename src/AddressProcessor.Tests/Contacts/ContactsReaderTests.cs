@@ -2,16 +2,35 @@
 {
     using AddressProcessing.Contacts;
     using NUnit.Framework;
+    using System.Globalization;
     using System.IO;
+    using System.Threading.Tasks;
     using Utils;
 
     [TestFixture]
     public class ContactsReaderTests
     {
         [Test]
-        public void Should_use_a_streamreader_to_read_file()
+        public async Task Should_use_a_streamreader_to_read_file()
         {
-            Assert.Inconclusive();
+            string contactName = "robert simmons";
+            string contactPostalAddress = "Holborn, London";
+
+            string newContact = string.Format(CultureInfo.InvariantCulture, "{0}\t{1}", contactName, contactPostalAddress);
+
+            using (var memoryStream = new MemoryStream())
+            using (var streamWriter = new StreamWriter(memoryStream))
+            using (var streamReader = new StreamReader(memoryStream))
+            using (var contactsReader = new ContactsReader(streamReader, new char[] { '\t' }))
+            {
+                await streamWriter.WriteLineAsync(newContact);
+                await streamWriter.FlushAsync();
+
+                var contact = await contactsReader.ReadContacts();
+
+                Assert.AreEqual(contactName, contact.Name);
+                Assert.AreEqual(contactPostalAddress, contact.PostalAddress);
+            }
         }
 
         [Test]
@@ -37,7 +56,9 @@
         public void Should_throw_filenotfoundexception_when_file_not_exist()
         {
             string missingFile = @"notfound.csv";
+
             TestUtils.DeleteFile(missingFile);
+
             Assert.Inconclusive();
         }
 
@@ -46,6 +67,5 @@
         {
 
         }
-
     }
 }
