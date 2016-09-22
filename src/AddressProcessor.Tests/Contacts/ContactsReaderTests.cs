@@ -4,6 +4,7 @@
     using NUnit.Framework;
     using System.Globalization;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
     using Utils;
 
@@ -36,9 +37,16 @@
         }
 
         [Test]
-        public void Should_read_from_a_file()
+        public async void Should_read_from_a_file()
         {
-            Assert.Inconclusive();
+            string testFile = @"test_data\contacts.csv";
+
+            var expected = (from line in File.ReadAllLines(testFile).Select(TestUtils.ContactFromLine)
+                            select line).ToArray();
+
+            var fileContacts = (await TestUtils.ReadFromFile(testFile)).ToArray();
+
+            Assert.True(expected.Length == fileContacts.Length); // if they're the same size we're good.
         }
 
         [Test]
