@@ -4,6 +4,7 @@
     using Moq;
     using NUnit.Framework;
     using System;
+    using System.Globalization;
     using System.IO;
 
     [TestFixture]
@@ -97,6 +98,23 @@
 
             Assert.IsNotNullOrEmpty(name);
             Assert.IsNotNullOrEmpty(postalAddress);
+        }
+
+        [Test]
+        public void Should_throw_with_unknown_file_mode_message_when_invalid_mode()
+        {
+            string testFile = @"test_data/contacts-empty.csv";
+            var invalidMode = (CSVReaderWriter.Mode)3;
+            string expectedException = string.Format(CultureInfo.InvariantCulture, "Unknown file mode for {0}", testFile);
+
+            var csvReaderWriter = new CSVReaderWriter();
+
+            var exception = Assert.Throws<Exception>(delegate
+            {
+                csvReaderWriter.Open(testFile, invalidMode);
+            });
+
+            Assert.AreEqual(expectedException, exception.Message);
         }
 
         [Test]
