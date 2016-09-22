@@ -69,13 +69,10 @@
 
             TestUtils.DeleteFile(missingFile);
 
-            Assert.Inconclusive();
-        }
-
-        [TestFixtureTearDown]
-        public void TearDown()
-        {
-
+            Assert.Throws<FileNotFoundException>(delegate
+            {
+                var contactsReader = new ContactsReader(missingFile);
+            });
         }
     }
 }
