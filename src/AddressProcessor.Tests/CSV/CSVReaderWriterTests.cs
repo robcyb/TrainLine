@@ -1,6 +1,7 @@
 ﻿namespace Csv.Tests
 {
     using AddressProcessing.CSV;
+    using AddressProcessing.Tests.Utils;
     using Moq;
     using NUnit.Framework;
     using System;
@@ -39,7 +40,7 @@
         {
             var missingFileToCreate = Path.Combine(TestDataOutputDirectory, "new.csv");
 
-            DeleteFile(missingFileToCreate); // make sure it definately doesn't exist!
+            TestUtils.DeleteFile(missingFileToCreate); // make sure it definately doesn't exist!
 
             var csvReaderWriter = new CSVReaderWriter();
             csvReaderWriter.Open(missingFileToCreate, CSVReaderWriter.Mode.Write);
@@ -120,9 +121,9 @@
         [Test]
         public void Should_throw_when_invalid_or_missing_directory_on_read()
         {
-            string missingFileAndDirectory = @"input\notfound.csv";
+            string missingFileAndDirectory = @"unknown\notfound.csv";
 
-            DeleteDirectory(missingFileAndDirectory);
+            TestUtils.DeleteDirectory(missingFileAndDirectory);
 
             var csvReaderWriter = new CSVReaderWriter();
 
@@ -136,40 +137,7 @@
         [TestFixtureTearDown]
         public void TearDown()
         {
-            if (Directory.Exists(TestDataOutputDirectory))
-            {
-                Directory.Delete(TestDataOutputDirectory, true);
-            }
-        }
-
-        /// <summary>
-        /// DeleteDirectory is a helper method used within the tests to delete a directory, and all files/folders under it.
-        /// </summary>
-        /// <param name="directory">The directory to delete</param>
-        private void DeleteDirectory(string directory)
-        {
-            var targetDirectory = Path.GetDirectoryName(directory);
-
-            if (Directory.Exists(targetDirectory))
-            {
-                Directory.Delete(targetDirectory, true); // delete the directory, and all files/folders under it.
-            }
-
-            Assert.False(Directory.Exists(targetDirectory));
-        }
-
-        /// <summary>
-        /// DeleteFile is a helper method used within the tests to delete a file under a given directory.
-        /// </summary>
-        /// <param name="file">The full path to the file to delete</param>
-        private void DeleteFile(string file)
-        {
-            if (File.Exists(file))
-            {
-                File.Delete(file);
-            }
-
-            Assert.False(File.Exists(file));
+            TestUtils.DeleteDirectory(TestDataOutputDirectory);
         }
     }
 }
